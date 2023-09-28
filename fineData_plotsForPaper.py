@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.14.1
+#       jupytext_version: 1.15.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -223,116 +223,6 @@ for useEndState in [True, False]:
         endStateStr = 'end' if useEndState else 'mt1'
 
         plt.savefig('../plots/final_plots/gammaVsBeta_{}_{}.pdf'.format(endStateStr, moddir), format='pdf', bbox_inches='tight')
-# -
-x = np.array([15, 17, 38])
-T = 70
-x = x/T
-print(x)
-np.cumsum(x)
-
-
-# +
-# This plot shows how beta and gamma co-vary, for BOTH sampling distributions and BOTH zetas, at the first MT or pre SN as appropriate
-
-# This function uses the frivolous gammas, so run it once to get all the plots I might need, then don't run it again...
-
-useEndState = True # do both!
-moddirs = ['uniformIC', 'moedistef']
-titles = ['Traditional Sampler', 'Moe \& Di Stefano (2017)', None, None]
-addExp = [not useEndState, False, False, False]
-addX = [False, False, True, True]
-addY = [True, False, True, False]
-zetas = ['Default', 'Default', 'Ge20', 'Ge20']
-addZetas = [True, False, True, False]
-yUpp = None if useEndState else 0.9
-
-fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(20, 16))
-axs = axes.flatten()
-
-for ii in range(len(axs)):
-    plotGammaVsBeta(axs[ii], moddir=moddirs[ii%2], yUpp=yUpp, zeta=zetas[ii], useEndState=useEndState, addZeta=addZetas[ii], addXLabel=addX[ii], addYLabel=addY[ii], title=titles[ii], addExplanation=addExp[ii], corner_letter=ii)
-
-
-fig.tight_layout()
-
-endStateStr = 'end' if useEndState else 'mt1'
-plt.savefig('../plots/final_plots/gammaVsBeta_2x2_{}.pdf'.format(endStateStr), format='pdf', bbox_inches='tight')
-
-
-# +
-# This plot shows how beta and gamma co-vary, for each of the subplots above, EACH
-
-# This function uses the frivolous gammas, so run it once to get all the plots I might need, then don't run it again...
-
-useEndStates = True # do both!
-moddirs = ['uniformIC', 'moedistef']
-titles = ['Traditional Sampler', 'Moe \& Di Stefano (2017)', None, None]
-addExp = [not useEndState, False, False, False]
-
-for useEndState in [True, False]:
-    for moddir in moddirs:
-        for title in titles:
-            for addexp in addExp:
-                fig, ax = plt.subplots(figsize=(8, 5))
-                plotGammaVsBeta(ax, moddir=moddir, useEndState=useEndState, title=title, addExplanation=addexp)
-
-                endStateStr = 'end' if useEndState else 'mt1'
-                fig.tight_layout()
-                plt.savefig('../plots/final_plots/individual_gammaVsBeta/gammaVsBeta_{}_{}.pdf'.format(endStateStr, moddir), format='pdf', bbox_inches='tight')
-
-
-# -
-
-
-
-
-
-
-# +
-# code scraps
-#plotGammaVsBeta(axs[1], moddir=, useEndState=useEndState, title=, addYLabel=False)
-#plotGammaVsBeta(axs[2], moddir='uniformIC', useEndState=useEndState, zeta='Ge20', title='Traditional Sampler')
-#plotGammaVsBeta(axs[3], moddir='moedistef', useEndState=useEndState, zeta='Ge20', title='Moe \& Di Stefano (2017)')
-
-
-#fig, axes = plt.subplots(ncols=4, figsize=(20, 16))
-#axs = axes.flatten()
-
-#for ii in range(len(axs)):
-#    plotGammaVsBeta(axs[ii], moddir=moddirs[ii%2], useEndState=useEndState, title=titles[ii], addExplanation=addExp[ii])
-#plotGammaVsBeta(axs[1], moddir=, useEndState=useEndState, title=, addYLabel=False)
-#plotGammaVsBeta(axs[2], moddir='uniformIC', useEndState=useEndState, zeta='Ge20', title='Traditional Sampler')
-#plotGammaVsBeta(axs[3], moddir='moedistef', useEndState=useEndState, zeta='Ge20', title='Moe \& Di Stefano (2017)')
-
-
-
-# -
-
-
-
-
-
-
-# +
-betas = ['0.0', '0.5', '1.0', 'Comp']#, 'CompC03', 'CompC30']
-moddir = 'uniformIC'
-zeta = 'Ge20'
-useEndState = False
-
-fname = '../data/finely_sampled_data_{}.dat'.format('end' if useEndState else 'mt1')
-
-for beta in betas:
-
-    mod = '{}/zeta{}_beta{}_fgamma{}/'.format(moddir, zeta, beta, '1.00')
-    if beta == '1.0':
-        mod = '{}/zeta{}_beta{}/'.format(moddir, zeta, beta)
-
-    with open(fname, 'r') as f:
-        lines = f.read().splitlines()
-    index = lines.index(mod)
-    frac_CEE = np.array(lines[index+1][1:-1].split(', '), dtype=float)
-    frac_SMT = np.array(lines[index+2][1:-1].split(', '), dtype=float)
-    
 # -
 
 
