@@ -1,0 +1,3 @@
+bse_rlof_rec += {                          # ADD to BSE_RLOF 
+     BINARY_PROPERTY::STELLAR_MERGER,
+}
